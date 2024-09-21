@@ -1,37 +1,48 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
-import { Code, Globe, Mail, Phone } from "lucide-react"
+import { Code, Globe, Mail, Phone, Moon, Sun } from "lucide-react"
 import Link from "next/link"
-import { useRef } from "react"
+import { useTheme } from "next-themes"
 
 export default function LandingPage() {
-  const servicesRef = useRef<HTMLElement>(null)
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
 
-  const scrollToServices = () => {
-    servicesRef.current?.scrollIntoView({ behavior: 'smooth' })
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null
   }
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="px-4 lg:px-6 h-14 flex items-center">
+      <header className="px-4 lg:px-6 h-14 flex items-center bg-black text-white">
         <Link className="flex items-center justify-center" href="#">
           <Code className="h-6 w-6" />
-          <span className="sr-only">Zura</span>
+          <span className="ml-2 font-bold">DevTeam</span>
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">
           <Link className="text-sm font-medium hover:underline underline-offset-4" href="#services">
             Services
           </Link>
-          <Link className="text-sm font-medium hover:underline underline-offset-4" href="#pricing">
-            Pricing
-          </Link>
           <Link className="text-sm font-medium hover:underline underline-offset-4" href="#contact">
             Contact
           </Link>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          >
+            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            <span className="sr-only">Toggle theme</span>
+          </Button>
         </nav>
       </header>
-      <main className="flex-1">
+      <main className="flex-1 bg-white dark:bg-gray-900">
         <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center space-y-4 text-center">
@@ -44,15 +55,17 @@ export default function LandingPage() {
                 </p>
               </div>
               <div className="space-x-4">
-                <Button onClick={scrollToServices}>Get Started</Button>
-                <Link href="/services">
-                  <Button variant="outline">Learn More</Button>
+                <Link href="#contact">
+                  <Button>Get in Touch</Button>
+                </Link>
+                <Link href="#services">
+                  <Button variant="outline">Our Services</Button>
                 </Link>
               </div>
             </div>
           </div>
         </section>
-        <section id="services" ref={servicesRef} className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
+        <section id="services" className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
           <div className="container px-4 md:px-6">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-8">Our Services</h2>
             <div className="grid gap-10 sm:grid-cols-2 md:grid-cols-3">
@@ -80,98 +93,44 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-        <section id="pricing" className="w-full py-12 md:py-24 lg:py-32">
+        <section id="contact" className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-8">
-              Affordable Pricing
+              Get in Touch
             </h2>
             <div className="grid gap-6 lg:grid-cols-3">
-              <div className="flex flex-col p-6 bg-white shadow-lg rounded-lg dark:bg-gray-800 justify-between border border-gray-200">
-                <div>
-                  <h3 className="text-2xl font-bold text-center">Basic</h3>
-                  <div className="mt-4 text-center text-gray-500 dark:text-gray-400">
-                    <span className="text-4xl font-bold">$99</span>/ month
-                  </div>
-                  <ul className="mt-4 space-y-2">
-                    <li className="flex items-center">
-                      <Code className="text-green-500 mr-2 h-4 w-4" />
-                      Custom Web Development
-                    </li>
-                    <li className="flex items-center">
-                      <Globe className="text-green-500 mr-2 h-4 w-4" />
-                      Basic Hosting
-                    </li>
-                  </ul>
-                </div>
-                <Button className="mt-6">Get Started</Button>
+              <div className="flex flex-col items-center p-6 bg-white shadow-lg rounded-lg dark:bg-gray-800 justify-between border border-gray-200">
+                <Mail className="h-10 w-10 mb-4 text-primary" />
+                <h3 className="text-xl font-bold mb-2">Email</h3>
+                <p className="text-center text-gray-500 dark:text-gray-400">
+                  Send us an email anytime
+                </p>
+                <Link href="mailto:admin@realmstory.cc" className="mt-4">
+                  <Button>Email Us</Button>
+                </Link>
               </div>
-              <div className="flex flex-col p-6 bg-white shadow-lg rounded-lg dark:bg-gray-800 justify-between border border-gray-200">
-                <div>
-                  <h3 className="text-2xl font-bold text-center">Pro</h3>
-                  <div className="mt-4 text-center text-gray-500 dark:text-gray-400">
-                    <span className="text-4xl font-bold">$199</span>/ month
-                  </div>
-                  <ul className="mt-4 space-y-2">
-                    <li className="flex items-center">
-                      <Code className="text-green-500 mr-2 h-4 w-4" />
-                      Advanced Web Development
-                    </li>
-                    <li className="flex items-center">
-                      <Globe className="text-green-500 mr-2 h-4 w-4" />
-                      Premium Hosting
-                    </li>
-                    <li className="flex items-center">
-                      <Phone className="text-green-500 mr-2 h-4 w-4" />
-                      24/7 Support
-                    </li>
-                  </ul>
-                </div>
-                <Button className="mt-6">Get Started</Button>
+              <div className="flex flex-col items-center p-6 bg-white shadow-lg rounded-lg dark:bg-gray-800 justify-between border border-gray-200">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 mb-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                <h3 className="text-xl font-bold mb-2">Telegram</h3>
+                <p className="text-center text-gray-500 dark:text-gray-400">
+                  Message us on Telegram
+                </p>
+                <Link href="https://t.me/sick1285" className="mt-4">
+                  <Button>@sick1285</Button>
+                </Link>
               </div>
-              <div className="flex flex-col p-6 bg-white shadow-lg rounded-lg dark:bg-gray-800 justify-between border border-gray-200">
-                <div>
-                  <h3 className="text-2xl font-bold text-center">Enterprise</h3>
-                  <div className="mt-4 text-center text-gray-500 dark:text-gray-400">
-                    <span className="text-4xl font-bold">Custom</span>
-                  </div>
-                  <ul className="mt-4 space-y-2">
-                    <li className="flex items-center">
-                      <Code className="text-green-500 mr-2 h-4 w-4" />
-                      Tailored Solutions
-                    </li>
-                    <li className="flex items-center">
-                      <Globe className="text-green-500 mr-2 h-4 w-4" />
-                      Custom Hosting
-                    </li>
-                    <li className="flex items-center">
-                      <Phone className="text-green-500 mr-2 h-4 w-4" />
-                      Priority Support
-                    </li>
-                  </ul>
-                </div>
-                <Button className="mt-6">Contact Us</Button>
+              <div className="flex flex-col items-center p-6 bg-white shadow-lg rounded-lg dark:bg-gray-800 justify-between border border-gray-200">
+                <Phone className="h-10 w-10 mb-4 text-primary" />
+                <h3 className="text-xl font-bold mb-2">Phone</h3>
+                <p className="text-center text-gray-500 dark:text-gray-400">
+                  Give us a call
+                </p>
+                <Link href="tel:+1234567890" className="mt-4">
+                  <Button>Call Now</Button>
+                </Link>
               </div>
-            </div>
-          </div>
-        </section>
-        <section id="contact" className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
-          <div className="container px-4 md:px-6">
-            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-8">Contact Us</h2>
-            <div className="max-w-2xl mx-auto text-center">
-              <p className="text-gray-500 dark:text-gray-400 mb-4">
-                Ready to get started? Reach out to us for a consultation.
-              </p>
-              <div className="space-y-2">
-                <div className="flex items-center justify-center">
-                  <Mail className="h-5 w-5 mr-2 text-primary" />
-                  <span>contact@zuraai.lol</span>
-                </div>
-                <div className="flex items-center justify-center">
-                  <Phone className="h-5 w-5 mr-2 text-primary" />
-                  <span>+31 622222222</span>
-                </div>
-              </div>
-              <Button className="mt-6">Send us a message</Button>
             </div>
           </div>
         </section>
